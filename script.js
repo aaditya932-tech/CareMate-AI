@@ -816,3 +816,760 @@ updateWaterTracker();
 updateNutrition();
 
 updateSleep();
+/* ==========================================
+   CareMate AI - script.js
+   Part 3A
+   Medicine Reminder Module
+========================================== */
+
+/* ========= MEDICINE ELEMENTS ========= */
+
+const medicineName =
+    document.getElementById("medicineName");
+
+const medicineDose =
+    document.getElementById("medicineDose");
+
+const medicineFrequency =
+    document.getElementById("medicineFrequency");
+
+const medicineTime =
+    document.getElementById("medicineTime");
+
+const addMedicineBtn =
+    document.getElementById("addMedicineBtn");
+
+const medicineList =
+    document.getElementById("medicineList");
+
+
+/* ========= ADD MEDICINE ========= */
+
+addMedicineBtn?.addEventListener("click", () => {
+
+    const name = medicineName.value.trim();
+    const dose = medicineDose.value.trim();
+    const frequency = medicineFrequency.value.trim();
+    const time = medicineTime.value;
+
+    if (!name || !dose || !frequency || !time) {
+
+        alert("Please fill all medicine details.");
+
+        return;
+    }
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    medicines.push({
+
+        id: Date.now(),
+
+        name: name,
+
+        dosage: dose,
+
+        frequency: frequency,
+
+        time: time,
+
+        status: "Pending"
+
+    });
+
+    saveData(
+        STORAGE_KEYS.medicines,
+        medicines
+    );
+
+    /* Clear Inputs */
+
+    medicineName.value = "";
+    medicineDose.value = "";
+    medicineFrequency.value = "";
+    medicineTime.value = "";
+
+    alert("Medicine added successfully.");
+
+    renderMedicines();
+
+    updateDashboard();
+
+});
+
+
+/* ========= RENDER MEDICINES ========= */
+
+function renderMedicines() {
+
+    if (!medicineList) return;
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    medicineList.innerHTML = "";
+
+    if (medicines.length === 0) {
+
+        medicineList.innerHTML = `
+            <div class="card">
+                <p>No medicines added yet.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    medicines.forEach(med => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "medicine-item";
+
+        card.innerHTML = `
+
+            <h3>💊 ${med.name}</h3>
+
+            <p>
+                Dosage:
+                ${med.dosage}
+            </p>
+
+            <p>
+                Frequency:
+                ${med.frequency}
+            </p>
+
+            <p>
+                Time:
+                ${med.time}
+            </p>
+
+            <p>
+                Status:
+                <strong>
+                    ${med.status}
+                </strong>
+            </p>
+
+            <div class="medicine-actions">
+
+                <button
+                    class="taken-btn"
+                    onclick="markMedicineStatus(
+                        ${med.id},
+                        'Taken'
+                    )"
+                >
+                    Taken
+                </button>
+
+                <button
+                    class="missed-btn"
+                    onclick="markMedicineStatus(
+                        ${med.id},
+                        'Missed'
+                    )"
+                >
+                    Missed
+                </button>
+
+            </div>
+
+        `;
+
+        medicineList.appendChild(card);
+
+    });
+
+    updateMedicineAdherence();
+
+}
+
+
+/* ========= MARK STATUS ========= */
+
+function markMedicineStatus(
+    medicineId,
+    status
+) {
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    const updated =
+        medicines.map(med => {
+
+            if (med.id === medicineId) {
+
+                med.status = status;
+
+            }
+
+            return med;
+
+        });
+
+    saveData(
+        STORAGE_KEYS.medicines,
+        updated
+    );
+
+    renderMedicines();
+
+    updateDashboard();
+
+}
+
+
+/* ========= ADHERENCE ========= */
+
+function updateMedicineAdherence() {
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    if (medicines.length === 0) {
+
+        return;
+    }
+
+    const taken =
+        medicines.filter(med =>
+            med.status === "Taken"
+        ).length;
+
+    const adherence =
+        Math.round(
+            (taken / medicines.length) * 100
+        );
+
+    console.log(
+        "Medicine Adherence:",
+        adherence + "%"
+    );
+
+    /* Alert if poor adherence */
+
+    if (
+        adherence < 70 &&
+        medicines.length > 0
+    ) {
+
+        console.warn(
+            "Please avoid skipping medications and consult healthcare professionals regarding dosage concerns."
+        );
+
+    }
+
+}
+
+
+/* ========= MEDICINE INSIGHT ========= */
+
+function getMedicineInsight() {
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    if (medicines.length === 0) {
+
+        return "No medicines scheduled.";
+    }
+
+    const taken =
+        medicines.filter(med =>
+            med.status === "Taken"
+        ).length;
+
+    const adherence =
+        Math.round(
+            (taken / medicines.length) * 100
+        );
+
+    if (adherence >= 90) {
+
+        return "Excellent medication adherence.";
+
+    } else if (adherence >= 70) {
+
+        return "Medication adherence is satisfactory.";
+
+    } else {
+
+        return "Please avoid skipping medications.";
+    }
+
+}
+
+
+/* ========= INITIALIZE ========= */
+
+renderMedicines();
+/* ==========================================
+   CareMate AI - script.js
+   Part 3B
+   AI Insights + Disease Recommendations
+   + Family Dashboard
+========================================== */
+
+/* ========= AI INSIGHTS ELEMENTS ========= */
+
+const insightScore =
+    document.getElementById("insightScore");
+
+const hydrationInsight =
+    document.getElementById("hydrationInsight");
+
+const nutritionInsight =
+    document.getElementById("nutritionInsight");
+
+const medicineInsight =
+    document.getElementById("medicineInsight");
+
+const diseaseInsight =
+    document.getElementById("diseaseInsight");
+
+const personalSuggestions =
+    document.getElementById("personalSuggestions");
+
+
+/* ========= FAMILY DASHBOARD ELEMENTS ========= */
+
+const familyHealth =
+    document.getElementById("familyHealth");
+
+const familyHydration =
+    document.getElementById("familyHydration");
+
+const familyNutrition =
+    document.getElementById("familyNutrition");
+
+const familyMedicine =
+    document.getElementById("familyMedicine");
+
+const familyEmergency =
+    document.getElementById("familyEmergency");
+
+const familyAI =
+    document.getElementById("familyAI");
+
+
+/* ========= DISEASE RECOMMENDATIONS ========= */
+
+function getDiseaseRecommendations() {
+
+    const profile =
+        getData(
+            STORAGE_KEYS.profile,
+            {}
+        );
+
+    const diseases =
+        (
+            profile.diseases || ""
+        ).toLowerCase();
+
+    let recommendations = [];
+
+    if (diseases.includes("diabetes")) {
+
+        recommendations.push(
+            "Avoid sugary snacks."
+        );
+
+        recommendations.push(
+            "Eat balanced meals."
+        );
+
+        recommendations.push(
+            "Maintain hydration."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "hypertension"
+        )
+    ) {
+
+        recommendations.push(
+            "Reduce salt intake."
+        );
+
+        recommendations.push(
+            "Take medicines regularly."
+        );
+
+        recommendations.push(
+            "Perform light exercise."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "arthritis"
+        )
+    ) {
+
+        recommendations.push(
+            "Stay physically active."
+        );
+
+        recommendations.push(
+            "Protect your joints."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "heart"
+        )
+    ) {
+
+        recommendations.push(
+            "Follow a heart-healthy diet."
+        );
+
+        recommendations.push(
+            "Monitor blood pressure regularly."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "kidney"
+        )
+    ) {
+
+        recommendations.push(
+            "Stay hydrated as advised by your doctor."
+        );
+
+        recommendations.push(
+            "Avoid excessive salt."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "osteoporosis"
+        )
+    ) {
+
+        recommendations.push(
+            "Increase calcium intake."
+        );
+
+        recommendations.push(
+            "Perform weight-bearing exercises."
+        );
+
+    }
+
+    if (
+        diseases.includes(
+            "thyroid"
+        )
+    ) {
+
+        recommendations.push(
+            "Take medications consistently."
+        );
+
+        recommendations.push(
+            "Attend routine check-ups."
+        );
+
+    }
+
+    if (
+        recommendations.length === 0
+    ) {
+
+        recommendations.push(
+            "No disease-specific recommendations available."
+        );
+
+    }
+
+    return recommendations;
+
+}
+
+
+/* ========= PERSONALIZED AI ========= */
+
+function generateSuggestions() {
+
+    let suggestions = [];
+
+    /* Hydration */
+
+    const water =
+        getData(
+            STORAGE_KEYS.water,
+            0
+        );
+
+    const goal =
+        getData(
+            STORAGE_KEYS.waterGoal,
+            2000
+        );
+
+    if (water < goal * 0.5) {
+
+        suggestions.push(
+            "Increase your water intake."
+        );
+
+    }
+
+    /* Nutrition */
+
+    const meals =
+        getData(
+            STORAGE_KEYS.nutrition,
+            []
+        );
+
+    if (meals.length < 3) {
+
+        suggestions.push(
+            "Consider adding protein-rich foods."
+        );
+
+    }
+
+    /* Medicines */
+
+    const medicines =
+        getData(
+            STORAGE_KEYS.medicines,
+            []
+        );
+
+    const missed =
+        medicines.filter(med =>
+            med.status === "Missed"
+        ).length;
+
+    if (missed > 0) {
+
+        suggestions.push(
+            "Please avoid skipping medications."
+        );
+
+    }
+
+    /* Sleep */
+
+    const sleep =
+        getData(
+            STORAGE_KEYS.sleep,
+            7
+        );
+
+    if (sleep < 6) {
+
+        suggestions.push(
+            "Improve your sleep schedule."
+        );
+
+    }
+
+    /* Disease */
+
+    suggestions.push(
+        ...getDiseaseRecommendations()
+    );
+
+    return suggestions;
+
+}
+
+
+/* ========= UPDATE INSIGHTS ========= */
+
+function updateAIInsights() {
+
+    if (insightScore) {
+
+        insightScore.textContent =
+            calculateHealthScore() +
+            "/100";
+    }
+
+    /* Hydration */
+
+    if (hydrationInsight) {
+
+        const water =
+            getData(
+                STORAGE_KEYS.water,
+                0
+            );
+
+        const goal =
+            getData(
+                STORAGE_KEYS.waterGoal,
+                2000
+            );
+
+        if (water < goal * 0.5) {
+
+            hydrationInsight.textContent =
+                "Hydration is below recommended levels.";
+
+        } else {
+
+            hydrationInsight.textContent =
+                "Hydration status looks good.";
+        }
+
+    }
+
+    /* Nutrition */
+
+    if (nutritionInsight) {
+
+        const meals =
+            getData(
+                STORAGE_KEYS.nutrition,
+                []
+            );
+
+        nutritionInsight.textContent =
+            meals.length >= 3
+                ? "Nutrition appears balanced."
+                : "Nutrition quality could be improved.";
+
+    }
+
+    /* Medicines */
+
+    if (medicineInsight) {
+
+        medicineInsight.textContent =
+            getMedicineInsight();
+
+    }
+
+    /* Disease */
+
+    if (diseaseInsight) {
+
+        diseaseInsight.textContent =
+            getDiseaseRecommendations()
+                .join(" ");
+
+    }
+
+    /* Suggestions */
+
+    if (personalSuggestions) {
+
+        personalSuggestions.textContent =
+            generateSuggestions()
+                .join(" ");
+
+    }
+
+}
+
+
+/* ========= FAMILY DASHBOARD ========= */
+
+function updateFamilyDashboard() {
+
+    if (familyHealth) {
+
+        familyHealth.textContent =
+            calculateHealthScore() +
+            "/100";
+    }
+
+    if (familyHydration) {
+
+        const water =
+            getData(
+                STORAGE_KEYS.water,
+                0
+            );
+
+        const goal =
+            getData(
+                STORAGE_KEYS.waterGoal,
+                2000
+            );
+
+        familyHydration.textContent =
+            `${water}/${goal} mL`;
+    }
+
+    if (familyNutrition) {
+
+        const meals =
+            getData(
+                STORAGE_KEYS.nutrition,
+                []
+            );
+
+        familyNutrition.textContent =
+            `${meals.length} meals logged`;
+    }
+
+    if (familyMedicine) {
+
+        familyMedicine.textContent =
+            getMedicineInsight();
+
+    }
+
+    if (familyEmergency) {
+
+        familyEmergency.textContent =
+            "No emergency alerts.";
+
+    }
+
+    if (familyAI) {
+
+        familyAI.textContent =
+            generateSuggestions()
+                .slice(0, 3)
+                .join(" ");
+    }
+
+}
+
+
+/* ========= INITIALIZE ========= */
+
+updateAIInsights();
+
+updateFamilyDashboard();
