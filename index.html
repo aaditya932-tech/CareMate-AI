@@ -1,1 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareMate AI</title>
 
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007BFF">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= SPLASH SCREEN ================= -->
+    <section id="splashScreen" class="screen active">
+        <div class="splash-content">
+            <div class="health-icon">🩺💙</div>
+
+            <h1>CareMate AI</h1>
+
+            <p>Your Smart Elderly Health Companion</p>
+
+            <button id="getStartedBtn" class="primary-btn">
+                Get Started
+            </button>
+        </div>
+    </section>
+
+
+    <!-- ================= PROFILE SETUP ================= -->
+    <section id="profileScreen" class="screen">
+
+        <div class="section-header">
+            <h2>👤 Profile Setup</h2>
+            <p>Tell us about yourself</p>
+        </div>
+
+        <form id="profileForm">
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Full Name"
+                required
+            >
+
+            <input
+                type="number"
+                id="age"
+                placeholder="Age"
+                required
+            >
+
+            <select id="gender" required>
+                <option value="">Gender</option>
+
+                <option>Male</option>
+
+                <option>Female</option>
+
+                <option>Other</option>
+            </select>
+
+            <input
+                type="number"
+                id="height"
+                placeholder="Height (cm)"
+                required
+            >
+
+            <input
+                type="number"
+                id="weight"
+                placeholder="Weight (kg)"
+                required
+            >
+
+            <textarea
+                id="diseases"
+                placeholder="Existing Diseases"
+            ></textarea>
+
+            <input
+                type="text"
+                id="emergencyName"
+                placeholder="Emergency Contact Name"
+                required
+            >
+
+            <input
+                type="tel"
+                id="emergencyNumber"
+                placeholder="Emergency Contact Number"
+                required
+            >
+
+            <button class="primary-btn" type="submit">
+                Save Profile
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ================= HOME DASHBOARD ================= -->
+    <section id="dashboardScreen" class="screen">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h2 id="greeting">
+                    Hello 👋
+                </h2>
+
+                <p id="currentDate"></p>
+            </div>
+
+            <button id="editProfileBtn" class="icon-btn">
+                ✏️
+            </button>
+
+        </header>
+
+
+        <!-- HEALTH CARDS -->
+
+        <div class="cards-grid">
+
+            <div class="card">
+                <h3>❤️ Health Score</h3>
+
+                <p id="healthScore">
+                    100/100
+                </p>
+            </div>
+
+
+            <div class="card">
+                <h3>💧 Water Intake</h3>
+
+                <p id="dashboardWater">
+                    0 mL
+                </p>
+            </div>
+
+
+            <div class="card">
+                <h3>🍽 Meals Logged</h3>
+
+                <p id="dashboardMeals">
+                    0
+                </p>
+            </div>
+
+
+            <div class="card">
+                <h3>💊 Medicines Taken</h3>
+
+                <p id="dashboardMedicines">
+                    0
+                </p>
+            </div>
+
+
+            <div class="card">
+                <h3>⏰ Pending Reminders</h3>
+
+                <p id="pendingReminders">
+                    0
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <h3 class="section-title">
+            Quick Actions
+        </h3>
+
+        <div class="quick-actions">
+
+            <button class="action-btn" data-target="waterSection">
+                💧
+                <span>Add Water</span>
+            </button>
+
+            <button class="action-btn" data-target="nutritionSection">
+                🍽
+                <span>Log Meal</span>
+            </button>
+
+            <button class="action-btn" data-target="medicineSection">
+                💊
+                <span>Medicines</span>
+            </button>
+
+            <button class="action-btn" data-target="insightsSection">
+                🧠
+                <span>AI Insights</span>
+            </button>
+
+            <button class="action-btn" data-target="familySection">
+                👨‍👩‍👧
+                <span>Family</span>
+            </button>
+
+            <button class="action-btn" data-target="chatSection">
+                🤖
+                <span>Ask CareMate</span>
+            </button>
+
+            <button class="action-btn sos-btn" id="sosBtn">
+                🚨
+                <span>Emergency SOS</span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= WATER TRACKER ================= -->
+
+    <section id="waterSection" class="module-section">
+
+        <h2>💧 Water Tracker</h2>
+
+        <div class="card">
+
+            <input
+                type="number"
+                id="waterGoal"
+                placeholder="Daily Goal (mL)"
+            >
+
+            <button id="saveWaterGoal" class="primary-btn">
+                Save Goal
+            </button>
+
+        </div>
+
+        <div class="quick-water">
+
+            <button class="water-btn" data-amount="250">
+                +250 mL
+            </button>
+
+            <button class="water-btn" data-amount="500">
+                +500 mL
+            </button>
+
+            <button class="water-btn" data-amount="750">
+                +750 mL
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    id="waterProgress"
+                ></div>
+
+            </div>
+
+            <p id="waterPercentage">
+                0%
+            </p>
+
+            <p id="waterAI">
+                Stay hydrated.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= NUTRITION TRACKER ================= -->
+
+    <section id="nutritionSection" class="module-section">
+
+        <h2>🍽 Nutrition Tracker</h2>
+
+        <div class="card">
+
+            <select id="mealType">
+
+                <option>Breakfast</option>
+
+                <option>Lunch</option>
+
+                <option>Dinner</option>
+
+                <option>Snacks</option>
+
+            </select>
+
+            <input
+                type="text"
+                id="foodInput"
+                placeholder="Food consumed"
+            >
+
+            <button id="logMealBtn" class="primary-btn">
+                Log Meal
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Today's Nutrition</h3>
+
+            <p id="nutritionSummary"></p>
+
+            <p id="nutritionAI"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MEDICINES ================= -->
+
+    <section id="medicineSection" class="module-section">
+
+        <h2>💊 Medicine Reminder</h2>
+
+        <div class="card">
+
+            <input
+                type="text"
+                id="medicineName"
+                placeholder="Medicine Name"
+            >
+
+            <input
+                type="text"
+                id="medicineDose"
+                placeholder="Dosage"
+            >
+
+            <input
+                type="text"
+                id="medicineFrequency"
+                placeholder="Frequency"
+            >
+
+            <input
+                type="time"
+                id="medicineTime"
+            >
+
+            <button id="addMedicineBtn" class="primary-btn">
+                Add Medicine
+            </button>
+
+        </div>
+
+        <div
+            id="medicineList"
+            class="medicine-list"
+        ></div>
+
+    </section>
+
+
+    <!-- ================= AI INSIGHTS ================= -->
+
+    <section id="insightsSection" class="module-section">
+
+        <h2>🧠 AI Health Insights</h2>
+
+        <div class="cards-grid">
+
+            <div class="card">
+                <h3>Health Score</h3>
+                <p id="insightScore"></p>
+            </div>
+
+            <div class="card">
+                <h3>Hydration</h3>
+                <p id="hydrationInsight"></p>
+            </div>
+
+            <div class="card">
+                <h3>Nutrition</h3>
+                <p id="nutritionInsight"></p>
+            </div>
+
+            <div class="card">
+                <h3>Medication</h3>
+                <p id="medicineInsight"></p>
+            </div>
+
+            <div class="card">
+                <h3>Disease Recommendations</h3>
+                <p id="diseaseInsight"></p>
+            </div>
+
+            <div class="card">
+                <h3>Suggestions</h3>
+                <p id="personalSuggestions"></p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CHAT ================= -->
+
+    <section id="chatSection" class="module-section">
+
+        <h2>🤖 Ask CareMate</h2>
+
+        <div
+            id="chatMessages"
+            class="chat-box"
+        ></div>
+
+        <div class="chat-input">
+
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="Ask a health question..."
+            >
+
+            <button id="sendChatBtn">
+                Send
+            </button>
+
+        </div>
+
+        <p class="chat-disclaimer">
+
+            This assistant provides general information and does not replace medical advice.
+
+        </p>
+
+    </section>
+
+
+    <!-- ================= FAMILY DASHBOARD ================= -->
+
+    <section id="familySection" class="module-section">
+
+        <h2>👨‍👩‍👧 Family Dashboard</h2>
+
+        <div class="cards-grid">
+
+            <div class="card">
+                <h3>Health Score</h3>
+                <p id="familyHealth"></p>
+            </div>
+
+            <div class="card">
+                <h3>Hydration</h3>
+                <p id="familyHydration"></p>
+            </div>
+
+            <div class="card">
+                <h3>Nutrition</h3>
+                <p id="familyNutrition"></p>
+            </div>
+
+            <div class="card">
+                <h3>Medicine Adherence</h3>
+                <p id="familyMedicine"></p>
+            </div>
+
+            <div class="card">
+                <h3>Emergency Alerts</h3>
+                <p id="familyEmergency"></p>
+            </div>
+
+            <div class="card">
+                <h3>AI Recommendations</h3>
+                <p id="familyAI"></p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SLEEP TRACKER ================= -->
+
+    <section id="sleepSection" class="module-section">
+
+        <h2>😴 Sleep Tracker</h2>
+
+        <div class="card">
+
+            <input
+                type="number"
+                id="sleepHours"
+                placeholder="Hours Slept"
+            >
+
+            <button id="saveSleepBtn" class="primary-btn">
+                Save Sleep
+            </button>
+
+            <p id="sleepInsight"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        CareMate AI is a health assistance prototype intended for educational and hackathon purposes only. It does not replace professional medical advice, diagnosis, or treatment.
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script src="script.js"></script>
+
+</body>
+</html>
