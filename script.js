@@ -1982,3 +1982,74 @@ function completeYoga(index) {
 }
 
 renderYoga();
+const doctorName = document.getElementById("doctorName");
+const hospitalName = document.getElementById("hospitalName");
+const appointmentDate = document.getElementById("appointmentDate");
+const appointmentTime = document.getElementById("appointmentTime");
+const appointmentReason = document.getElementById("appointmentReason");
+const addAppointmentBtn = document.getElementById("addAppointmentBtn");
+const appointmentList = document.getElementById("appointmentList");addAppointmentBtn?.addEventListener("click", () => {
+
+    const appointment = {
+        id: Date.now(),
+        doctor: doctorName.value,
+        hospital: hospitalName.value,
+        date: appointmentDate.value,
+        time: appointmentTime.value,
+        reason: appointmentReason.value
+    };
+
+    if (!appointment.doctor || !appointment.date) {
+        alert("Please fill required fields");
+        return;
+    }
+
+    let data = getData("appointments", []);
+    data.push(appointment);
+
+    saveData("appointments", data);
+
+    doctorName.value = "";
+    hospitalName.value = "";
+    appointmentDate.value = "";
+    appointmentTime.value = "";
+    appointmentReason.value = "";
+
+    renderAppointments();
+    updateDashboard();
+
+    alert("Appointment saved successfully");
+});function renderAppointments() {
+
+    if (!appointmentList) return;
+
+    let data = getData("appointments", []);
+
+    appointmentList.innerHTML = "";
+
+    data.forEach(app => {
+
+        appointmentList.innerHTML += `
+            <div class="appointment-card">
+                <h3>🩺 ${app.doctor}</h3>
+                <p><b>Hospital:</b> ${app.hospital}</p>
+                <p><b>Date:</b> ${app.date}</p>
+                <p><b>Time:</b> ${app.time}</p>
+                <p><b>Reason:</b> ${app.reason}</p>
+            </div>
+        `;
+    });
+}function getNextAppointmentReminder() {
+
+    let data = getData("appointments", []);
+
+    if (data.length === 0) return "No upcoming appointments.";
+
+    let next = data[0];
+
+    return `Next appointment with ${next.doctor} on ${next.date} at ${next.time}`;
+}const familyAppointment = document.getElementById("familyAppointment");
+
+if (familyAppointment) {
+    familyAppointment.textContent = getNextAppointmentReminder();
+}renderAppointments();
