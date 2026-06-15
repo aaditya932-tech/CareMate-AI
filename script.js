@@ -1573,3 +1573,301 @@ function updateFamilyDashboard() {
 updateAIInsights();
 
 updateFamilyDashboard();
+/* ==========================================
+   CareMate AI - script.js
+   Part 3C
+   Chat Assistant + Emergency SOS
+   + Final Initialization
+========================================== */
+
+/* ========= CHAT ELEMENTS ========= */
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatInput =
+    document.getElementById("chatInput");
+
+const sendChatBtn =
+    document.getElementById("sendChatBtn");
+
+
+/* ========= CHAT FUNCTIONS ========= */
+
+function addChatMessage(message, sender) {
+
+    if (!chatMessages) return;
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        `chat-message ${
+            sender === "user"
+                ? "user-message"
+                : "bot-message"
+        }`;
+
+    bubble.textContent = message;
+
+    chatMessages.appendChild(bubble);
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+/* ========= CHAT HISTORY ========= */
+
+function saveChatHistory(
+    message,
+    sender
+) {
+
+    const history =
+        getData(
+            STORAGE_KEYS.chat,
+            []
+        );
+
+    history.push({
+
+        message: message,
+
+        sender: sender,
+
+        timestamp:
+            new Date().toLocaleString()
+
+    });
+
+    saveData(
+        STORAGE_KEYS.chat,
+        history
+    );
+
+}
+
+
+function loadChatHistory() {
+
+    if (!chatMessages) return;
+
+    chatMessages.innerHTML = "";
+
+    const history =
+        getData(
+            STORAGE_KEYS.chat,
+            []
+        );
+
+    history.forEach(item => {
+
+        addChatMessage(
+            item.message,
+            item.sender
+        );
+
+    });
+
+}
+
+
+/* ========= RULE-BASED AI ========= */
+
+function getAIResponse(question) {
+
+    const text =
+        question.toLowerCase();
+
+    if (
+        text.includes("mango") &&
+        text.includes("diabetes")
+    ) {
+
+        return "Mango may be consumed in moderation. Portion control is important for people with diabetes.";
+
+    }
+
+    if (
+        text.includes("bp") ||
+        text.includes("blood pressure")
+    ) {
+
+        return "Follow your doctor's instructions regarding missed doses and avoid doubling medication without professional advice.";
+
+    }
+
+    if (
+        text.includes("forgot") &&
+        text.includes("medicine")
+    ) {
+
+        return "Consult your healthcare professional regarding missed doses and avoid changing your schedule without guidance.";
+
+    }
+
+    if (
+        text.includes("water") ||
+        text.includes("hydration")
+    ) {
+
+        return "Hydration needs vary, but many adults benefit from adequate daily water intake based on health conditions and activity levels.";
+
+    }
+
+    if (
+        text.includes("sleep")
+    ) {
+
+        return "Maintaining a regular sleep schedule can support overall health and well-being.";
+
+    }
+
+    if (
+        text.includes("exercise")
+    ) {
+
+        return "Light to moderate physical activity is beneficial for many older adults. Consult your healthcare provider before starting a new routine.";
+
+    }
+
+    return "Please consult a healthcare professional for personalized advice.";
+
+}
+
+
+/* ========= SEND CHAT ========= */
+
+sendChatBtn?.addEventListener("click", () => {
+
+    sendMessage();
+
+});
+
+
+chatInput?.addEventListener(
+    "keypress",
+    (event) => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+function sendMessage() {
+
+    const message =
+        chatInput.value.trim();
+
+    if (!message) {
+
+        return;
+    }
+
+    addChatMessage(
+        message,
+        "user"
+    );
+
+    saveChatHistory(
+        message,
+        "user"
+    );
+
+    const response =
+        getAIResponse(message);
+
+    setTimeout(() => {
+
+        addChatMessage(
+            response,
+            "bot"
+        );
+
+        saveChatHistory(
+            response,
+            "bot"
+        );
+
+    }, 500);
+
+    chatInput.value = "";
+
+}
+
+
+/* ========= EMERGENCY SOS ========= */
+
+const sosBtn =
+    document.getElementById("sosBtn");
+
+sosBtn?.addEventListener("click", () => {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to activate Emergency SOS?"
+        );
+
+    if (!confirmed) {
+
+        return;
+    }
+
+    const profile =
+        getData(
+            STORAGE_KEYS.profile,
+            {}
+        );
+
+    const emergencyName =
+        profile.emergencyName ||
+        "Emergency Contact";
+
+    alert(
+        `Emergency contact (${emergencyName}) has been notified.\n\nThis is a demonstration feature only.`
+    );
+
+    if (familyEmergency) {
+
+        familyEmergency.textContent =
+            `SOS activated for ${emergencyName}`;
+    }
+
+});
+
+
+/* ========= FINAL INITIALIZATION ========= */
+
+window.addEventListener("load", () => {
+
+    loadChatHistory();
+
+    renderMedicines();
+
+    updateWaterTracker();
+
+    updateNutrition();
+
+    updateSleep();
+
+    updateDashboard();
+
+    updateAIInsights();
+
+    updateFamilyDashboard();
+
+});
+
+
+console.log(
+    "CareMate AI initialized successfully."
+);
