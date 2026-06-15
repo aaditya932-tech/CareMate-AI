@@ -428,3 +428,34 @@ footer{
     }
 
 }
+/* ===== Yoga Section ===== */
+
+.yoga-card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin: 15px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.yoga-card h3 {
+    margin-bottom: 10px;
+}
+
+.yoga-card p {
+    margin: 6px 0;
+}
+
+.yoga-card button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.yoga-card button:active {
+    transform: scale(0.98);
+}
