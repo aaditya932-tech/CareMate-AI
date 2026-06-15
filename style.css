@@ -1,1 +1,430 @@
+/* ==========================
+   CareMate AI - style.css
+   Mobile First Healthcare PWA
+========================== */
 
+:root{
+    --primary:#007BFF;
+    --secondary:#28A745;
+    --light-blue:#EAF6FF;
+    --white:#FFFFFF;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --danger:#ef4444;
+    --shadow:0 10px 25px rgba(0,0,0,0.08);
+    --radius:20px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:var(--light-blue);
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom:40px;
+}
+
+/* ==========================
+   SCREENS
+========================== */
+
+.screen{
+    display:none;
+    min-height:100vh;
+    padding:20px;
+}
+
+.screen.active{
+    display:block;
+}
+
+.module-section{
+    display:none;
+    padding:20px;
+}
+
+.module-section.active{
+    display:block;
+}
+
+/* ==========================
+   SPLASH SCREEN
+========================== */
+
+#splashScreen{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.splash-content{
+    max-width:320px;
+}
+
+.health-icon{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+.splash-content h1{
+    color:var(--primary);
+    font-size:2.3rem;
+    margin-bottom:12px;
+}
+
+.splash-content p{
+    color:var(--muted);
+    margin-bottom:30px;
+    line-height:1.6;
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.primary-btn{
+    width:100%;
+    border:none;
+    padding:14px;
+    border-radius:15px;
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #3b9dff
+    );
+    color:white;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:0.3s;
+}
+
+.primary-btn:active{
+    transform:scale(.97);
+}
+
+.icon-btn{
+    border:none;
+    background:white;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* ==========================
+   FORMS
+========================== */
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    border-radius:15px;
+    border:1px solid #d6dce3;
+    font-size:15px;
+    outline:none;
+    background:white;
+}
+
+textarea{
+    resize:none;
+    min-height:90px;
+}
+
+/* ==========================
+   HEADERS
+========================== */
+
+.section-header{
+    margin-bottom:25px;
+}
+
+.section-header h2{
+    color:var(--primary);
+    margin-bottom:8px;
+}
+
+.section-header p{
+    color:var(--muted);
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.dashboard-header h2{
+    color:var(--primary);
+}
+
+.dashboard-header p{
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* ==========================
+   CARDS
+========================== */
+
+.cards-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:var(--shadow);
+}
+
+.card h3{
+    font-size:14px;
+    color:var(--muted);
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:18px;
+    font-weight:600;
+}
+
+/* ==========================
+   QUICK ACTIONS
+========================== */
+
+.section-title{
+    margin-bottom:15px;
+    color:var(--primary);
+}
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.action-btn{
+    background:white;
+    border:none;
+    border-radius:18px;
+    padding:18px 10px;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    transition:.3s;
+}
+
+.action-btn:active{
+    transform:scale(.95);
+}
+
+.action-btn span{
+    font-size:12px;
+    text-align:center;
+}
+
+.sos-btn{
+    background:var(--danger);
+    color:white;
+}
+
+/* ==========================
+   WATER TRACKER
+========================== */
+
+.quick-water{
+    display:flex;
+    gap:10px;
+    margin:15px 0;
+}
+
+.water-btn{
+    flex:1;
+    border:none;
+    border-radius:15px;
+    padding:12px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+}
+
+.progress-container{
+    width:100%;
+    height:18px;
+    background:#dbeafe;
+    border-radius:50px;
+    overflow:hidden;
+    margin:15px 0;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        var(--secondary),
+        #6ee7b7
+    );
+    border-radius:50px;
+    transition:.4s;
+}
+
+/* ==========================
+   MEDICINES
+========================== */
+
+.medicine-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-top:20px;
+}
+
+.medicine-item{
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    box-shadow:var(--shadow);
+}
+
+.medicine-actions{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+.medicine-actions button{
+    flex:1;
+    border:none;
+    border-radius:12px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.taken-btn{
+    background:var(--secondary);
+    color:white;
+}
+
+.missed-btn{
+    background:var(--danger);
+    color:white;
+}
+
+/* ==========================
+   CHAT
+========================== */
+
+.chat-box{
+    background:white;
+    border-radius:20px;
+    height:350px;
+    overflow-y:auto;
+    padding:15px;
+    box-shadow:var(--shadow);
+}
+
+.chat-message{
+    max-width:80%;
+    margin-bottom:15px;
+    padding:12px 15px;
+    border-radius:18px;
+    line-height:1.5;
+}
+
+.user-message{
+    background:var(--primary);
+    color:white;
+    margin-left:auto;
+}
+
+.bot-message{
+    background:#eef2ff;
+}
+
+.chat-input{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.chat-input input{
+    flex:1;
+}
+
+.chat-input button{
+    border:none;
+    border-radius:15px;
+    background:var(--primary);
+    color:white;
+    padding:0 18px;
+    cursor:pointer;
+}
+
+.chat-disclaimer{
+    margin-top:15px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+footer{
+    padding:25px 20px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* ==========================
+   TABLETS
+========================== */
+
+@media(min-width:768px){
+
+    body{
+        max-width:600px;
+        margin:auto;
+    }
+
+    .quick-actions{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .cards-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
