@@ -1871,3 +1871,114 @@ window.addEventListener("load", () => {
 console.log(
     "CareMate AI initialized successfully."
 );
+console.log(
+    "CareMate AI initialized successfully."
+);
+/* ===== Yoga Module ===== */
+
+const yogaPoses = [
+
+    {
+        name: "Chair Yoga",
+        duration: "5 Minutes",
+        benefits: "Improves flexibility and balance.",
+        instructions: "Sit comfortably, raise your arms, breathe deeply.",
+        safety: "Stop if you feel dizzy."
+    },
+
+    {
+        name: "Mountain Pose",
+        duration: "3 Minutes",
+        benefits: "Improves posture and stability.",
+        instructions: "Stand straight with feet together.",
+        safety: "Use support if needed."
+    },
+
+    {
+        name: "Seated Twist",
+        duration: "4 Minutes",
+        benefits: "Enhances spinal mobility.",
+        instructions: "Sit and gently twist your torso.",
+        safety: "Avoid forcing the movement."
+    },
+
+    {
+        name: "Deep Breathing",
+        duration: "5 Minutes",
+        benefits: "Promotes relaxation.",
+        instructions: "Inhale slowly and exhale deeply.",
+        safety: "Breathe comfortably."
+    }
+
+];
+
+function renderYoga() {
+
+    const container =
+        document.getElementById("yogaContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    yogaPoses.forEach((pose, index) => {
+
+        container.innerHTML += `
+
+            <div class="yoga-card">
+
+                <h3>${pose.name}</h3>
+
+                <p><strong>Duration:</strong>
+                ${pose.duration}</p>
+
+                <p><strong>Benefits:</strong>
+                ${pose.benefits}</p>
+
+                <p><strong>Instructions:</strong>
+                ${pose.instructions}</p>
+
+                <p><strong>Safety Tip:</strong>
+                ${pose.safety}</p>
+
+                <button onclick="completeYoga(${index})">
+
+                    Mark as Completed
+
+                </button>
+
+            </div>
+
+        `;
+    });
+
+}
+
+function completeYoga(index) {
+
+    let completed =
+        JSON.parse(
+            localStorage.getItem("yogaCompleted")
+        ) || [];
+
+    completed.push({
+
+        pose: yogaPoses[index].name,
+
+        date: new Date().toLocaleDateString()
+
+    });
+
+    localStorage.setItem(
+        "yogaCompleted",
+        JSON.stringify(completed)
+    );
+
+    alert(
+        yogaPoses[index].name +
+        " completed! Great job!"
+    );
+
+}
+
+renderYoga();
