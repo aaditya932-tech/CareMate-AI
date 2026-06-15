@@ -220,6 +220,9 @@
 <button class="quick-btn" onclick="showSection('yogaSection')">
     🧘 Yoga
 </button>
+            <button class="quick-btn" onclick="showSection('appointmentSection')">
+    🩺 Appointment
+            </button>
             <button class="action-btn sos-btn" id="sosBtn">
                 🚨
                 <span>Emergency SOS</span>
@@ -529,6 +532,28 @@
     <h2>🧘 Yoga for Seniors</h2>
 
     <div id="yogaContainer"></div>
+
+</section>
+    <!-- Appointment Section -->
+<section id="appointmentSection" class="page-section">
+
+    <h2>🩺 Appointment Reminder</h2>
+
+    <div class="card">
+
+        <input type="text" id="doctorName" placeholder="Doctor Name">
+        <input type="text" id="hospitalName" placeholder="Hospital / Clinic">
+        <input type="date" id="appointmentDate">
+        <input type="time" id="appointmentTime">
+        <input type="text" id="appointmentReason" placeholder="Reason">
+
+        <button id="addAppointmentBtn">
+            Add Appointment
+        </button>
+
+    </div>
+
+    <div id="appointmentList"></div>
 
 </section>
 
